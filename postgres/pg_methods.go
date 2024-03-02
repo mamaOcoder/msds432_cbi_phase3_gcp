@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"p3-docker/common"
 	"strconv"
 	"sync"
@@ -20,8 +19,8 @@ var (
 )
 
 const (
-	host     = "host.docker.internal"
-	port     = 5433
+	host     = "/cloudsql/msds432-chicago-business-intel:us-central1:cbipostgres"
+	port     = 5432
 	user     = "postgres"
 	password = "root"
 	dbname   = "chicago_business_intelligence"
@@ -61,7 +60,7 @@ func openConnection() (*sql.DB, error) {
 	return db, nil
 }
 
-func CreateDatabase() error {
+/*func CreateDatabase() error {
 
 	// Check if the database exists
 	db, err := openConnection()
@@ -82,7 +81,7 @@ func CreateDatabase() error {
 	writeToLog("Database created successfully.")
 
 	return nil
-}
+}*/
 
 // PostgreSQL code for transportation data
 func CreateTaxiTable() error {
