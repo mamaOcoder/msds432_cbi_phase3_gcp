@@ -19,7 +19,7 @@ var (
 )
 
 const (
-	host     = "/cloudsql/msds432-chicago-business-intel:us-central1:cbipostgres"
+	host     = "/cloudsql/msds432-cbi-phase3:us-central1:cbipostgres"
 	port     = 5432
 	user     = "postgres"
 	password = "root"

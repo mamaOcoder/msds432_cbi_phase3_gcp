@@ -16,6 +16,7 @@ Note that we are setting up the PostgreSQL database directly on GCP, so the code
 6. Create chicago_business_intelligence database. Execute the command:  
     *gcloud sql databases create chicago_business_intelligence --instance=cbipostgres*
 7. Add the PostgreSQL instance connection name into Go code for host name.
+8. Update cloudbuild.yaml file with project name and API Key.
 
 ### Continuous Deployment
 1. Create GitHub repository for CBI source code.
