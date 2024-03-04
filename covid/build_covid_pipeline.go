@@ -132,10 +132,10 @@ func BuildCovidTable() error {
 	writeToLog("Starting Build Covid")
 
 	// Make sure that the covid table is created
-	err := createCovidTable()
+	/*err := createCovidTable()
 	if err != nil {
 		return fmt.Errorf("Error creating Covid19 table: %v", err)
-	}
+	}*/
 
 	queryURLs := common.BuildUrls(covidURLs, recordLimit)
 

@@ -72,10 +72,10 @@ func BuildTaxiTable() error {
 	writeToLog("Starting Build Taxi")
 
 	// Make sure that the taxi table is created
-	err := createTaxiTable()
+	/*err := createTaxiTable()
 	if err != nil {
 		return fmt.Errorf("Error creating taxi table: %v", err)
-	}
+	}*/
 
 	queryURLs := common.BuildUrls(taxiURLs, recordLimit)
 
@@ -123,7 +123,7 @@ func BuildTaxiTable() error {
 	taxiStream := generator(done, taxiTrips)
 	errCount := 0
 	for ct := range cleanTaxi(done, taxiStream) {
-		err = addTaxiTrip(ct)
+		err := addTaxiTrip(ct)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s trip to database.", ct.API, ct.TripID)

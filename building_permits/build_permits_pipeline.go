@@ -69,10 +69,10 @@ func BuildPermitsTable() error {
 	writeToLog("Starting Build Permits")
 
 	// Make sure that the permits table is created
-	err := createPermitTable()
+	/*err := createPermitTable()
 	if err != nil {
 		return fmt.Errorf("Error creating building_permits table: %v", err)
-	}
+	}*/
 
 	queryURLs := common.BuildUrls(permitURLs, recordLimit)
 

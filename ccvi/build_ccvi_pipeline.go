@@ -66,10 +66,10 @@ func BuildCcviTable() error {
 	writeToLog("Starting Build CCVI")
 
 	// Make sure that the taxi table is created
-	err := createCcviTable()
+	/*err := createCcviTable()
 	if err != nil {
 		return fmt.Errorf("Error creating CCVI table: %v", err)
-	}
+	}*/
 
 	done := make(chan interface{})
 	defer close(done)
