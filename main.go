@@ -13,8 +13,6 @@ import (
 	"p3-gcp/transportation"
 	"p3-gcp/unemployment"
 	"time"
-
-	"github.com/robfig/cron/v3"
 )
 
 func init() {
@@ -93,11 +91,12 @@ func main() {
 
 	// Initial run of all tasks
 	start := time.Now()
-	allTasks()
+	//allTasks()
+	unemployment.BuildUnemploymentTable()
 	fmt.Println("Total time taken:", time.Since(start))
 
 	// Define cron jobs to look for updates from the City of Chicago database
-	scheduler := cron.New()
+	/*scheduler := cron.New()
 
 	// Taxi databases get updated monthly
 	_, err := scheduler.AddFunc("@monthly", func() {
@@ -124,7 +123,7 @@ func main() {
 	}
 
 	// Start the cron scheduler
-	scheduler.Start()
+	scheduler.Start()*/
 
 	http.HandleFunc("/", handler)
 
