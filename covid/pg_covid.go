@@ -22,9 +22,7 @@ func createCovidTable() error {
 		"week_start" TIMESTAMP WITH TIME ZONE, 
 		"week_end" TIMESTAMP WITH TIME ZONE, 
 		"cases_weekly" INTEGER,
-		-- "location" GEOGRAPHY(Point, 4326),
-		"latitude" DOUBLE PRECISION,
-		"longitude" DOUBLE PRECISION,
+		"location" GEOGRAPHY(Point, 4326),
 		"community_area" VARCHAR(255),
 		"api_endpoint" VARCHAR(255),
 		PRIMARY KEY ("row_id") 
@@ -92,17 +90,13 @@ func addCovidRecord(covid covidCases) error {
 										"week_start", 
 										"week_end", 
 										"cases_weekly",
-										-- "location",
-										"latitude",
-										"longitude",
+										"location",
 										"community_area",
 										"api_endpoint") 
-			values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
+			values($1, $2, $3, $4, $5, $6, $7, $8, $9)`
 
 	// Convert the array of float64 coordinates into a valid geography type
-	//loc := fmt.Sprintf("SRID=4326;POINT(%f %f)", covid.Location.Coordinates[0], covid.Location.Coordinates[1])
-	lat := covid.Location.Coordinates[1]
-	lon := covid.Location.Coordinates[0]
+	loc := fmt.Sprintf("SRID=4326;POINT(%f %f)", covid.Location.Coordinates[0], covid.Location.Coordinates[1])
 
 	_, err = db.Exec(sql,
 		covid.RowID,
@@ -111,9 +105,7 @@ func addCovidRecord(covid covidCases) error {
 		covid.WeekStart,
 		covid.WeekEnd,
 		covid.CasesWeekly,
-		//loc,
-		lat,
-		lon,
+		loc,
 		covid.ComArea,
 		covid.API)
 
