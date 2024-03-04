@@ -23,7 +23,9 @@ func createCcviTable() error {
 		"zip_code" VARCHAR(255),
 		"ccvi_category" VARCHAR(255),
 		"ccvi_score" DOUBLE PRECISION,
-		"location" GEOGRAPHY(Point, 4326),
+		-- "location" GEOGRAPHY(Point, 4326),
+		"latitude" DOUBLE PRECISION,
+		"longitude" DOUBLE PRECISION,
 		"api_endpoint" VARCHAR(255),
 		PRIMARY KEY ("id") 
 	);`
@@ -91,12 +93,16 @@ func addCcviRecord(ccvi ccvi) error {
 							"zip_code", 
 							"ccvi_category",
 							"ccvi_score",
-							"location",
+							-- "location",
+							"latitude",
+							"longitude",
 							"api_endpoint") 
-			values($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+			values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
 
 	// Convert the array of float64 coordinates into a valid geography type
-	loc := fmt.Sprintf("SRID=4326;POINT(%f %f)", ccvi.Location.Coordinates[0], ccvi.Location.Coordinates[1])
+	//loc := fmt.Sprintf("SRID=4326;POINT(%f %f)", ccvi.Location.Coordinates[0], ccvi.Location.Coordinates[1])
+	lat := ccvi.Location.Coordinates[1]
+	lon := ccvi.Location.Coordinates[0]
 
 	_, err = db.Exec(sql,
 		ccvi.ID,
@@ -106,7 +112,9 @@ func addCcviRecord(ccvi ccvi) error {
 		ccvi.ZipCode,
 		ccvi.CcviCategory,
 		ccvi.CcviScore,
-		loc,
+		//loc,
+		lat,
+		lon,
 		ccvi.API)
 
 	if err != nil {

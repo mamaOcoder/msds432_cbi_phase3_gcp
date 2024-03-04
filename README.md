@@ -1,7 +1,7 @@
 # 3.GCP-Docker-PG-Go
 This folder contains the code for the Google Cloud Platform implementation stage. In this stage, the code written in the localhost stage is pushed and hosted on GCP Cloud Run. To run this, the user must have GCP account and project.
 
-Note that we are setting up the PostgreSQL database directly on GCP, so the code in our Go application to create the database should just return that the database already exists. The main function was also updated to include http handler information.
+Note that we are setting up the PostgreSQL database directly on GCP, so the code in our Go application to create the database should just return that the database already exists. The main function was also updated to include http handler information. I was unable to get the postgis extension added- when adding it via CLI, it said that it worked, however, I get errors when my Go app actually runs. For now, I am removing the geography fields.
 
 ## Setup/Run
 ### Create GCP Project and PostgreSQL database
@@ -15,7 +15,7 @@ Note that we are setting up the PostgreSQL database directly on GCP, so the code
     *gcloud sql users set-password postgres --instance=cbipostgres --password=root*
 6. Create chicago_business_intelligence database. Execute the command:  
     *gcloud sql databases create chicago_business_intelligence --instance=cbipostgres*
-7. Add the postgis extension. Execute the commands:  
+7. *Note: this approach did not work. For now, just removing postgis dependencies.* Add the postgis extension. Execute the commands:  
     *gcloud sql connect cbipostgres --user=postgres --quiet*  
     *CREATE EXTENSION IF NOT EXISTS postgis;*
 7. Add the PostgreSQL instance connection name into Go code for host name.

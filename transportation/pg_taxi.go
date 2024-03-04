@@ -25,10 +25,10 @@ func createTaxiTable() error {
 		"dropoff_community_area" VARCHAR(255),
 		"pickup_centroid_latitude" DOUBLE PRECISION, 
 		"pickup_centroid_longitude" DOUBLE PRECISION, 
-		"pickup_centroid_location" GEOGRAPHY(Point, 4326),
+		-- "pickup_centroid_location" GEOGRAPHY(Point, 4326),
 		"dropoff_centroid_latitude" DOUBLE PRECISION, 
 		"dropoff_centroid_longitude" DOUBLE PRECISION, 
-		"dropoff_centroid_location" GEOGRAPHY(Point, 4326),
+		-- "dropoff_centroid_location" GEOGRAPHY(Point, 4326),
 		"pickup_zip_code" VARCHAR(255), 
 		"dropoff_zip_code" VARCHAR(255), 
 		"api_endpoint" VARCHAR(255),
@@ -99,18 +99,18 @@ func addTaxiTrip(taxi taxiTrip) error {
 									"dropoff_community_area",
 									"pickup_centroid_latitude", 
 									"pickup_centroid_longitude", 
-									"pickup_centroid_location",
+									-- "pickup_centroid_location",
 									"dropoff_centroid_latitude", 
 									"dropoff_centroid_longitude", 
-									"dropoff_centroid_location",
+									-- "dropoff_centroid_location",
 									"pickup_zip_code", 
 									"dropoff_zip_code", 
 									"api_endpoint") 
-			values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`
+			values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)` //, $15, $16)`
 
 	// Convert the array of float64 coordinates into a valid geography type
-	pickupLoc := fmt.Sprintf("SRID=4326;POINT(%f %f)", taxi.PickupLocation.Coordinates[0], taxi.PickupLocation.Coordinates[1])
-	dropoffLoc := fmt.Sprintf("SRID=4326;POINT(%f %f)", taxi.DropoffLocation.Coordinates[0], taxi.DropoffLocation.Coordinates[1])
+	//pickupLoc := fmt.Sprintf("SRID=4326;POINT(%f %f)", taxi.PickupLocation.Coordinates[0], taxi.PickupLocation.Coordinates[1])
+	//dropoffLoc := fmt.Sprintf("SRID=4326;POINT(%f %f)", taxi.DropoffLocation.Coordinates[0], taxi.DropoffLocation.Coordinates[1])
 
 	_, err = db.Exec(sql,
 		taxi.TripID,
@@ -122,10 +122,10 @@ func addTaxiTrip(taxi taxiTrip) error {
 		taxi.DropoffCA,
 		taxi.PickupLatitude,
 		taxi.PickupLongitude,
-		pickupLoc,
+		//pickupLoc,
 		taxi.DropoffLatitude,
 		taxi.DropoffLongitude,
-		dropoffLoc,
+		//dropoffLoc,
 		taxi.PickupZipCode,
 		taxi.DropoffZipCode,
 		taxi.API)
