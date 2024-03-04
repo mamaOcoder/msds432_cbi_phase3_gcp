@@ -8,6 +8,7 @@ import (
 )
 
 func getTaxi(done <-chan interface{}, urls ...string) <-chan common.Response {
+
 	var wg sync.WaitGroup
 	responses := make(chan common.Response)
 

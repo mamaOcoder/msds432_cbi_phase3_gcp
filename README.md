@@ -1,7 +1,7 @@
 # 3.GCP-Docker-PG-Go
 This folder contains the code for the Google Cloud Platform implementation stage. In this stage, the code written in the localhost stage is pushed and hosted on GCP Cloud Run. To run this, the user must have GCP account and project.
 
-Note that we are setting up the PostgreSQL database directly on GCP, so the code in our Go application to create the database can be removed. The main function was also updated to include http handler information.
+Note that we are setting up the PostgreSQL database directly on GCP, so the code in our Go application to create the database should just return that the database already exists. The main function was also updated to include http handler information.
 
 ## Setup/Run
 ### Create GCP Project and PostgreSQL database
@@ -15,17 +15,22 @@ Note that we are setting up the PostgreSQL database directly on GCP, so the code
     *gcloud sql users set-password postgres --instance=cbipostgres --password=root*
 6. Create chicago_business_intelligence database. Execute the command:  
     *gcloud sql databases create chicago_business_intelligence --instance=cbipostgres*
+7. Add the postgis extension. Execute the commands:
+    *gcloud sql connect cbipostgres --user=postgres --quiet*
+    *CREATE EXTENSION IF NOT EXISTS postgis;*
 7. Add the PostgreSQL instance connection name into Go code for host name.
 8. Update cloudbuild.yaml file with project name and API Key.
 
 ### Continuous Deployment
 1. Create GitHub repository for CBI source code.
 2. Enable Cloud Build API for project.
-3. Push source code to GitHub repo.
+3. Create a trigger and connect GitHub repository.
 
 ### Go-microservice and Pg-admin
 1. Enable Cloud Run API for project.
-2. Enable IAM permissions.
-
+2. Enable IAM permissions. *Note this will likely take a lot of additional work and trouble-shooting*
 
 ## View Results
+1. Push source code to GitHub repo. This will trigger a new build to run.
+2. Go to Cloud Run and verify services are up and running.
+3. Click on each service to view log and get URL links.
