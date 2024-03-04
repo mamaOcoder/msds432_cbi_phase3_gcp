@@ -22,7 +22,7 @@ func createPermitTable() error {
 		"permit_type" VARCHAR(255),
 		"application_start_date" TIMESTAMP WITH TIME ZONE,
 		"issue_date" TIMESTAMP WITH TIME ZONE,
-		"work_description" TEXT,
+		"work_description" VARCHAR(255),
 		"total_fee" DOUBLE PRECISION,
 		"reported_cost" DOUBLE PRECISION,
 		"community_area" VARCHAR(255),
@@ -30,7 +30,7 @@ func createPermitTable() error {
 		"ycoordinate" DOUBLE PRECISION,
 		"latitude" DOUBLE PRECISION,
 		"longitude" DOUBLE PRECISION,
-		"location" GEOGRAPHY(Point, 4326),
+		-- "location" GEOGRAPHY(Point, 4326),
 		"zip_code" VARCHAR(255),
 		"api_endpoint" VARCHAR(255),
 		PRIMARY KEY ("id") 
@@ -105,10 +105,10 @@ func addPermitRecord(permit buildingPermit) error {
 										"ycoordinate",
 										"latitude",
 										"longitude",
-										"location",
+										-- "location",
 										"zip_code",
 										"api_endpoint") 
-			values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)`
+			values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)` //, $16)`
 
 	// convert string to floats
 	tf, _ := strconv.ParseFloat(permit.TotalFee, 64)
@@ -119,7 +119,7 @@ func addPermitRecord(permit buildingPermit) error {
 	lon, _ := strconv.ParseFloat(permit.Longitude, 64)
 
 	// Convert the array of float64 coordinates into a valid geography type
-	loc := fmt.Sprintf("SRID=4326;POINT(%f %f)", permit.Location.Coordinates[0], permit.Location.Coordinates[1])
+	//loc := fmt.Sprintf("SRID=4326;POINT(%f %f)", permit.Location.Coordinates[0], permit.Location.Coordinates[1])
 
 	_, err = db.Exec(sql,
 		permit.ID,
@@ -135,7 +135,7 @@ func addPermitRecord(permit buildingPermit) error {
 		yc,
 		lat,
 		lon,
-		loc,
+		//loc,
 		permit.ZipCode,
 		permit.API)
 
