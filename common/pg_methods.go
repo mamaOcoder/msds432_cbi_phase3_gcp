@@ -72,15 +72,5 @@ func CreateDatabase() error {
 		return err
 	}
 
-	// Install PostGIS extension
-	if _, err := db.Exec("CREATE EXTENSION IF NOT EXISTS postgis;"); err != nil {
-		log.Fatal("Error installing PostGIS extension: ", err)
-	}
-
-	// Enable PostGIS extension in the database
-	if _, err := db.Exec("CREATE EXTENSION IF NOT EXISTS postgis;"); err != nil {
-		log.Fatal("Error enabling PostGIS extension: ", err)
-	}
-
 	return nil
 }
