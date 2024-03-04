@@ -68,10 +68,10 @@ func BuildPermitsTable() error {
 	fmt.Println("Starting Build Permits")
 	writeToLog("Starting Build Permits")
 
-	// Make sure that the taxi table is created
+	// Make sure that the permits table is created
 	err := createPermitTable()
 	if err != nil {
-		return fmt.Errorf("Error creating taxi table: %v", err)
+		return fmt.Errorf("Error creating building_permits table: %v", err)
 	}
 
 	queryURLs := common.BuildUrls(permitURLs, recordLimit)
