@@ -10,5 +10,6 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod tidy
 COPY . ./
+RUN mkdir -p logfiles
 RUN go build -o /main
 CMD [ "/main" ]

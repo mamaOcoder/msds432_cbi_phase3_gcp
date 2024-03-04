@@ -1,0 +1,27 @@
+2024/03/04 13:16:02 Starting Build Permits
+2024/03/04 13:16:02 Table building_permits created successfully
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=9000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=4000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=0
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=3000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=2000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=1000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=6000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=7000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=5000
+2024/03/04 13:16:02 Making API call: https://data.cityofchicago.org/resource/ydr8-5enu.json?$limit=1000&$offset=8000
+2024/03/04 13:16:03 Response: 200 OK
+2024/03/04 13:16:03 Response: 200 OK
+2024/03/04 13:16:03 Response: 200 OK
+2024/03/04 13:16:03 Response: 200 OK
+2024/03/04 13:16:04 Response: 200 OK
+2024/03/04 13:16:05 Response: 200 OK
+2024/03/04 13:16:05 Response: 200 OK
+2024/03/04 13:16:05 Response: 200 OK
+2024/03/04 13:16:05 Response: 200 OK
+2024/03/04 13:16:05 Response: 200 OK
+2024/03/04 13:16:05 Completed API pull.
+2024/03/04 13:16:05 Number of building permit records: 10000
+2024/03/04 13:16:05 Starting pipeline to clean data and write to PostgreSQL.
+2024/03/04 13:16:05 Skipping record ydr8-5enu.json?id=1830273. Missing all location information.
+2024/03/04 13:16:05 Finished Build Permits
