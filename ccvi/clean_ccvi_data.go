@@ -2,11 +2,11 @@ package ccvi
 
 import (
 	"fmt"
-	"p3-docker/common"
+	"p3-gcp/common"
 )
 
-func cleanCCVI(done <-chan interface{}, ccviStream <-chan common.CCVI) <-chan common.CCVI {
-	cleanStream := make(chan common.CCVI)
+func cleanCCVI(done <-chan interface{}, ccviStream <-chan ccvi) <-chan ccvi {
+	cleanStream := make(chan ccvi)
 	go func() {
 		defer close(cleanStream)
 		for record := range ccviStream {

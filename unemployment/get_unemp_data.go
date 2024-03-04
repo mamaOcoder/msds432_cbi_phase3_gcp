@@ -3,7 +3,7 @@ package unemployment
 import (
 	"fmt"
 	"net/http"
-	"p3-docker/common"
+	"p3-gcp/common"
 )
 
 func getUnemployment(url string) common.Response {

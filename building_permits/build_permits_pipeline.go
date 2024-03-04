@@ -6,9 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
-	"p3-docker/cazip"
-	"p3-docker/common"
-	"p3-docker/postgres"
+	"p3-gcp/cazip"
+	"p3-gcp/common"
 	"sync"
 	"time"
 )
@@ -43,8 +42,8 @@ func writeToLog(format string, args ...interface{}) {
 }
 
 // Generator function turns API response into stream of taxiTrip structs
-func generator(done <-chan interface{}, permitsList []common.BuildingPermit) <-chan common.BuildingPermit {
-	permitsStream := make(chan common.BuildingPermit)
+func generator(done <-chan interface{}, permitsList []buildingPermit) <-chan buildingPermit {
+	permitsStream := make(chan buildingPermit)
 	go func() {
 		defer close(permitsStream)
 		for _, permit := range permitsList {
@@ -70,7 +69,7 @@ func BuildPermitsTable() error {
 	writeToLog("Starting Build Permits")
 
 	// Make sure that the taxi table is created
-	err := postgres.CreatePermitTable()
+	err := createPermitTable()
 	if err != nil {
 		return fmt.Errorf("Error creating taxi table: %v", err)
 	}
@@ -83,7 +82,7 @@ func BuildPermitsTable() error {
 	const maxWorkers = 10 // Limiting simultaneous API requests
 	semaphore := make(chan struct{}, maxWorkers)
 
-	var buildingPermits []common.BuildingPermit
+	var buildingPermits []buildingPermit
 	for _, url := range queryURLs {
 		semaphore <- struct{}{}
 		go func(url string) {
@@ -93,7 +92,7 @@ func BuildPermitsTable() error {
 					fmt.Println("Error:", response.Error)
 					writeToLog("Error: %s", response.Error)
 				} else {
-					var permits []common.BuildingPermit
+					var permits []buildingPermit
 					b, _ := io.ReadAll(response.Response.Body)
 					json.Unmarshal(b, &permits)
 					for i := range permits {
@@ -122,7 +121,7 @@ func BuildPermitsTable() error {
 	errCount := 0
 	//countpermit := 0
 	for cp := range cleanPermit(done, permitStream) {
-		err := postgres.AddPermitRecord(cp)
+		err := addPermitRecord(cp)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s permit to database.", cp.API, cp.ID)

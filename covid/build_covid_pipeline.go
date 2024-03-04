@@ -7,9 +7,8 @@ import (
 	"io"
 	"log"
 	"os"
-	"p3-docker/cazip"
-	"p3-docker/common"
-	"p3-docker/postgres"
+	"p3-gcp/cazip"
+	"p3-gcp/common"
 	"sync"
 	"time"
 )
@@ -53,8 +52,8 @@ func writeToLog(format string, args ...interface{}) {
 }
 
 // Generator function turns API response into stream of taxiTrip structs
-func generator(done <-chan interface{}, covidList []common.CovidCases) <-chan common.CovidCases {
-	covidStream := make(chan common.CovidCases)
+func generator(done <-chan interface{}, covidList []covidCases) <-chan covidCases {
+	covidStream := make(chan covidCases)
 	go func() {
 		defer close(covidStream)
 		for _, cases := range covidList {
@@ -133,7 +132,7 @@ func BuildCovidTable() error {
 	writeToLog("Starting Build Covid")
 
 	// Make sure that the covid table is created
-	err := postgres.CreateCovidTable()
+	err := createCovidTable()
 	if err != nil {
 		return fmt.Errorf("Error creating Covid19 table: %v", err)
 	}
@@ -146,7 +145,7 @@ func BuildCovidTable() error {
 	const maxWorkers = 10 // Limiting simultaneous API requests
 	semaphore := make(chan struct{}, maxWorkers)
 
-	var covidCasesList []common.CovidCases
+	var covidCasesList []covidCases
 
 	for _, url := range queryURLs {
 		semaphore <- struct{}{}
@@ -157,7 +156,7 @@ func BuildCovidTable() error {
 					fmt.Println("Error:", response.Error)
 					writeToLog("Error: %s", response.Error)
 				} else {
-					var cases []common.CovidCases
+					var cases []covidCases
 					b, _ := io.ReadAll(response.Response.Body)
 					json.Unmarshal(b, &cases)
 					for i := range cases {
@@ -184,7 +183,7 @@ func BuildCovidTable() error {
 	covidStream := generator(done, covidCasesList)
 	errCount := 0
 	for cc := range cleanCovid(done, covidStream) {
-		err := postgres.AddCovidRecord(cc)
+		err := addCovidRecord(cc)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?row_id=%s record to database.", cc.API, cc.RowID)

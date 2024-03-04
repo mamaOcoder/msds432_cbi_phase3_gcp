@@ -1,4 +1,4 @@
-module p3-docker
+module p3-gcp
 
 go 1.21.1
 

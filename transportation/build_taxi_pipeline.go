@@ -6,9 +6,8 @@ import (
 	"io"
 	"log"
 	"os"
-	"p3-docker/cazip"
-	"p3-docker/common"
-	"p3-docker/postgres"
+	"p3-gcp/cazip"
+	"p3-gcp/common"
 	"sync"
 	"time"
 )
@@ -43,8 +42,8 @@ func writeToLog(format string, args ...interface{}) {
 }
 
 // Generator function turns API response into stream of taxiTrip structs
-func generator(done <-chan interface{}, taxiTripList []common.TaxiTrip) <-chan common.TaxiTrip {
-	taxiStream := make(chan common.TaxiTrip)
+func generator(done <-chan interface{}, taxiTripList []taxiTrip) <-chan taxiTrip {
+	taxiStream := make(chan taxiTrip)
 	go func() {
 		defer close(taxiStream)
 		for _, trip := range taxiTripList {
@@ -73,7 +72,7 @@ func BuildTaxiTable() error {
 	writeToLog("Starting Build Taxi")
 
 	// Make sure that the taxi table is created
-	err := postgres.CreateTaxiTable()
+	err := createTaxiTable()
 	if err != nil {
 		return fmt.Errorf("Error creating taxi table: %v", err)
 	}
@@ -86,7 +85,7 @@ func BuildTaxiTable() error {
 	const maxWorkers = 10 // Limiting simultaneous API requests
 	semaphore := make(chan struct{}, maxWorkers)
 
-	var taxiTrips []common.TaxiTrip
+	var taxiTrips []taxiTrip
 	for _, url := range queryURLs {
 		semaphore <- struct{}{}
 		go func(url string) {
@@ -96,7 +95,7 @@ func BuildTaxiTable() error {
 					fmt.Println("Error:", response.Error)
 					writeToLog("Error: %s", response.Error)
 				} else {
-					var trips []common.TaxiTrip
+					var trips []taxiTrip
 					b, _ := io.ReadAll(response.Response.Body)
 					json.Unmarshal(b, &trips)
 					for i := range trips {
@@ -124,7 +123,7 @@ func BuildTaxiTable() error {
 	taxiStream := generator(done, taxiTrips)
 	errCount := 0
 	for ct := range cleanTaxi(done, taxiStream) {
-		err = postgres.AddTaxiTrip(ct)
+		err = addTaxiTrip(ct)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s trip to database.", ct.API, ct.TripID)

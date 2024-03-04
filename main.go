@@ -5,12 +5,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"p3-docker/building_permits"
-	"p3-docker/cazip"
-	"p3-docker/ccvi"
-	"p3-docker/covid"
-	"p3-docker/transportation"
-	"p3-docker/unemployment"
+	"p3-gcp/building_permits"
+	"p3-gcp/cazip"
+	"p3-gcp/ccvi"
+	"p3-gcp/covid"
+	"p3-gcp/transportation"
+	"p3-gcp/unemployment"
 	"time"
 )
 

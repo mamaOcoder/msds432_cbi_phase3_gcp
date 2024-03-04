@@ -2,14 +2,14 @@ package transportation
 
 import (
 	"fmt"
-	"p3-docker/common"
+	"p3-gcp/common"
 	"strconv"
 
 	"github.com/paulmach/orb"
 )
 
-func cleanTaxi(done <-chan interface{}, taxiStream <-chan common.TaxiTrip) <-chan common.TaxiTrip {
-	cleanStream := make(chan common.TaxiTrip)
+func cleanTaxi(done <-chan interface{}, taxiStream <-chan taxiTrip) <-chan taxiTrip {
+	cleanStream := make(chan taxiTrip)
 	go func() {
 		defer close(cleanStream)
 		for trip := range taxiStream {

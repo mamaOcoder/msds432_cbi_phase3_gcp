@@ -6,9 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"p3-docker/cazip"
-	"p3-docker/common"
-	"p3-docker/postgres"
+	"p3-gcp/cazip"
 	"sync"
 	"time"
 )
@@ -43,8 +41,8 @@ func writeToLog(format string, args ...interface{}) {
 }
 
 // Generator function turns API response into stream of ccvi structs
-func generator(done <-chan interface{}, ccviList []common.CCVI) <-chan common.CCVI {
-	ccviStream := make(chan common.CCVI)
+func generator(done <-chan interface{}, ccviList []ccvi) <-chan ccvi {
+	ccviStream := make(chan ccvi)
 	go func() {
 		defer close(ccviStream)
 		for _, ccvi := range ccviList {
@@ -68,7 +66,7 @@ func BuildCcviTable() error {
 	writeToLog("Starting Build CCVI")
 
 	// Make sure that the taxi table is created
-	err := postgres.CreateCcviTable()
+	err := createCcviTable()
 	if err != nil {
 		return fmt.Errorf("Error creating CCVI table: %v", err)
 	}
@@ -76,7 +74,7 @@ func BuildCcviTable() error {
 	done := make(chan interface{})
 	defer close(done)
 
-	var ccviRecords []common.CCVI
+	var ccviRecords []ccvi
 
 	response := getCCVI(ccviURL)
 	if response.Error != nil {
@@ -101,7 +99,7 @@ func BuildCcviTable() error {
 	ccviStream := generator(done, ccviRecords)
 	errCount := 0
 	for cc := range cleanCCVI(done, ccviStream) {
-		err := postgres.AddCcviRecord(cc)
+		err := addCcviRecord(cc)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s record to database.", cc.API, cc.ID)

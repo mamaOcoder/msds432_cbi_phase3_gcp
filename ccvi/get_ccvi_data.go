@@ -3,7 +3,7 @@ package ccvi
 import (
 	"fmt"
 	"net/http"
-	"p3-docker/common"
+	"p3-gcp/common"
 )
 
 func getCCVI(url string) common.Response {

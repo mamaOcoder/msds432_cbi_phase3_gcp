@@ -6,9 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
-	"p3-docker/cazip"
-	"p3-docker/common"
-	"p3-docker/postgres"
+	"p3-gcp/cazip"
 	"sync"
 	"time"
 )
@@ -43,8 +41,8 @@ func writeToLog(format string, args ...interface{}) {
 }
 
 // Generator function turns API response into stream of taxiTrip structs
-func generator(done <-chan interface{}, unempList []common.Unemployment) <-chan common.Unemployment {
-	unempStream := make(chan common.Unemployment)
+func generator(done <-chan interface{}, unempList []unemployment) <-chan unemployment {
+	unempStream := make(chan unemployment)
 	go func() {
 		defer close(unempStream)
 		for _, record := range unempList {
@@ -71,7 +69,7 @@ func BuildUnemploymentTable() error {
 	writeToLog("Starting Build Unemployment")
 
 	// Make sure that the unemployment table is created
-	err := postgres.CreateUnemploymentTable()
+	err := createUnemploymentTable()
 	if err != nil {
 		return fmt.Errorf("Error creating unemployment table: %v", err)
 	}
@@ -79,7 +77,7 @@ func BuildUnemploymentTable() error {
 	done := make(chan interface{})
 	defer close(done)
 
-	var unempRecords []common.Unemployment
+	var unempRecords []unemployment
 
 	response := getUnemployment(unempURL)
 	if response.Error != nil {
@@ -104,7 +102,7 @@ func BuildUnemploymentTable() error {
 	unempStream := generator(done, unempRecords)
 	errCount := 0
 	for cu := range cleanUnemployment(done, unempStream) {
-		err := postgres.AddUnempRecord(cu)
+		err := addUnempRecord(cu)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?community_area=%s record to database.", cu.API, cu.ComArea)

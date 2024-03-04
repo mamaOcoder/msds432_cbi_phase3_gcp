@@ -14,8 +14,6 @@ steps:
 # Steps to build a docker image for go-microservice, push it to container registry and deploy it to cloud run.  
 - name: "gcr.io/cloud-builders/docker"
   args: ['build', '-t', 'gcr.io/msds432-cbi-phase3/go-microservice','.']
-  env:
-    - 'API_KEY=AIzaSyB0kOn-0ZXamQlUvlSn6c2TKqCvAqPT5zQ'
 - name: "gcr.io/cloud-builders/docker"
   args: ['push', 'gcr.io/msds432-cbi-phase3/go-microservice']
 

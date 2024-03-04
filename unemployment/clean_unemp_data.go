@@ -2,11 +2,11 @@ package unemployment
 
 import (
 	"fmt"
-	"p3-docker/common"
+	"p3-gcp/common"
 )
 
-func cleanUnemployment(done <-chan interface{}, unempStream <-chan common.Unemployment) <-chan common.Unemployment {
-	cleanStream := make(chan common.Unemployment)
+func cleanUnemployment(done <-chan interface{}, unempStream <-chan unemployment) <-chan unemployment {
+	cleanStream := make(chan unemployment)
 	go func() {
 		defer close(cleanStream)
 		for record := range unempStream {
