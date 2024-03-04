@@ -15,7 +15,7 @@ Note that we are setting up the PostgreSQL database directly on GCP, so the code
     *gcloud sql users set-password postgres --instance=cbipostgres --password=root*
 6. Create chicago_business_intelligence database. Execute the command:  
     *gcloud sql databases create chicago_business_intelligence --instance=cbipostgres*
-7. Add the postgis extension. Execute the commands:
+7. Add the postgis extension. Execute the commands:  
     *gcloud sql connect cbipostgres --user=postgres --quiet*
     *CREATE EXTENSION IF NOT EXISTS postgis;*
 7. Add the PostgreSQL instance connection name into Go code for host name.
