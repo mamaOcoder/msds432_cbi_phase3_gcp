@@ -7,9 +7,11 @@ import (
 	"os"
 	"p3-gcp/building_permits"
 	"p3-gcp/cazip"
+	"p3-gcp/ccvi"
 	"p3-gcp/common"
 	"p3-gcp/covid"
 	"p3-gcp/transportation"
+	"p3-gcp/unemployment"
 	"time"
 
 	"github.com/robfig/cron/v3"
@@ -43,16 +45,16 @@ func allTasks() {
 	defer close(done)
 
 	// Channel to handle errors
-	errCh := make(chan error, 1) // Buffer size 5 to handle errors from 5 tasks
+	errCh := make(chan error, 5) // Buffer size 5 to handle errors from 5 tasks
 
 	// Concurrently execute tasks
-	/*go func() {
+	go func() {
 		errCh <- transportation.BuildTaxiTable() // Build taxi table
-	}()*/
+	}()
 	go func() {
 		errCh <- covid.BuildCovidTable() // Build Covid table
 	}()
-	/*go func() {
+	go func() {
 		errCh <- ccvi.BuildCcviTable() // Build CCVI table
 	}()
 	go func() {
@@ -60,10 +62,10 @@ func allTasks() {
 	}()
 	go func() {
 		errCh <- building_permits.BuildPermitsTable()
-	}()*/
+	}()
 
 	// Wait for all tasks to complete
-	for i := 0; i < 1; i++ { // Waiting for 5 tasks to complete
+	for i := 0; i < 5; i++ { // Waiting for 5 tasks to complete
 		if err := <-errCh; err != nil {
 			fmt.Println("Error:", err)
 		}
@@ -93,8 +95,7 @@ func main() {
 
 	// Initial run of all tasks
 
-	//allTasks()
-	go covid.BuildCovidTable()
+	go allTasks()
 
 	http.HandleFunc("/", handler)
 
