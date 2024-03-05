@@ -138,7 +138,7 @@ func BuildPermitsTable() error {
 		}
 	}
 
-	fmt.Printf("Number of valid permits (not missing required values): %v\n", countWritten)
+	fmt.Printf("Number of valid permits (not missing required values): %v\n", countpermit)
 	fmt.Println("Finished Build Permits: ", countWritten)
 	writeToLog("Finished Build Permits: %v", countWritten)
 
