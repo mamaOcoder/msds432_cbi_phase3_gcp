@@ -49,26 +49,26 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 
 			if permit.ID == "" {
 				writeToLog("Skipping record. Missing id.")
-				return
+				continue
 			}
-			fmt.Println(permit.ID)
+
 			if permit.PermitNum == "" {
 				writeToLog("Skipping record %s?id=%s. Missing permit_number.", permit.API, permit.ID)
-				return
+				continue
 			}
 			if permit.PermitType == "" {
 				writeToLog("Skipping record %s?id=%s. Missing permit_type.", permit.API, permit.ID)
-				return
+				continue
 			}
 
 			if common.CheckTimeFormat(permit.AppDate) == false {
 				writeToLog("Skipping record %s?id=%s. Malformed application_start_date.", permit.API, permit.ID)
-				return
+				continue
 			}
 
 			if common.CheckTimeFormat(permit.IssueDate) == false {
 				writeToLog("Skipping record %s?id=%s. Malformed issue_date.", permit.API, permit.ID)
-				return
+				continue
 			}
 
 			// Make sure we have location information
@@ -80,7 +80,7 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 					if permit.ComArea == "" {
 						fmt.Printf("Skipping record %s?id=%s. Missing all location information.", permit.API, permit.ID)
 						writeToLog("Skipping record %s?id=%s. Missing all location information.", permit.API, permit.ID)
-						return
+						continue
 					}
 					// we will have to use community area to determine zip code
 					caOnly = true
@@ -130,7 +130,7 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 				}
 
 			}
-			fmt.Println(permit)
+
 			select {
 			case <-done:
 				return

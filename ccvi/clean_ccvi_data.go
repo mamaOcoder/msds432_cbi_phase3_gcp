@@ -21,24 +21,24 @@ func cleanCCVI(done <-chan interface{}, ccviStream <-chan ccvi) <-chan ccvi {
 
 			if record.GeographyType == "" {
 				writeToLog("Skipping record. Missing geography_type.")
-				return
+				continue
 			}
 			if record.CAorZip == "" {
 				writeToLog("Skipping record. Missing community_area_or_zip.")
-				return
+				continue
 			}
 			if record.CcviScore == "" {
 				writeToLog("Skipping record. Missing ccvi_score.")
-				return
+				continue
 			}
 			if record.CcviCategory == "" {
 				writeToLog("Skipping record. Missing ccvi_category.")
-				return
+				continue
 			}
 
 			if len(record.Location.Coordinates) == 0 {
 				writeToLog("Skipping record. Missing location coordinates.")
-				return
+				continue
 			}
 
 			// Split CA and zip code records for easier/consistent querying of our data lake

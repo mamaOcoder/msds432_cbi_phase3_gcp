@@ -120,9 +120,7 @@ func BuildPermitsTable() error {
 	permitStream := generator(done, buildingPermits)
 	errCount := 0
 	countWritten := 0
-	countpermit := 0
 	for cp := range cleanPermit(done, permitStream) {
-		countpermit++
 		written, err := addPermitRecord(cp)
 		if err != nil {
 			fmt.Println(err)
@@ -138,7 +136,6 @@ func BuildPermitsTable() error {
 		}
 	}
 
-	fmt.Printf("Number of valid permits (not missing required values): %v\n", countpermit)
 	fmt.Println("Finished Build Permits: ", countWritten)
 	writeToLog("Finished Build Permits: %v", countWritten)
 

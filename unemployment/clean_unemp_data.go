@@ -21,15 +21,15 @@ func cleanUnemployment(done <-chan interface{}, unempStream <-chan unemployment)
 
 			if record.ComArea == "" {
 				writeToLog("Skipping record. Missing community_area.")
-				return
+				continue
 			}
 			if record.BelowPL == "" {
 				writeToLog("Skipping record. Missing below_poverty_level.")
-				return
+				continue
 			}
 			if record.Unemployment == "" {
 				writeToLog("Skipping record. Missing unemployment.")
-				return
+				continue
 			}
 
 			// For better efficiency we could rewrite the lookup as a map

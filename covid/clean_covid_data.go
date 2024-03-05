@@ -22,15 +22,15 @@ func cleanCovid(done <-chan interface{}, covidStream <-chan covidCases) <-chan c
 
 			if record.RowID == "" {
 				writeToLog("Skipping record. Missing row_id.")
-				return
+				continue
 			}
 			if record.ZipCode == "" {
 				writeToLog("Skipping record %s?row_id=%s. Missing zip_code.", record.API, record.RowID)
-				return
+				continue
 			}
 			if record.WeekNum == "" {
 				writeToLog("Skipping record %s?row_id=%s. Missing week_number.", record.API, record.RowID)
-				return
+				continue
 			}
 
 			//City of Chicago leaves this blank until count reaches 5. We will impute blank value to 0.
@@ -40,17 +40,17 @@ func cleanCovid(done <-chan interface{}, covidStream <-chan covidCases) <-chan c
 
 			if common.CheckTimeFormat(record.WeekStart) == false {
 				writeToLog("Skipping record %s?row_id=%s. Malformed week_start.", record.API, record.RowID)
-				return
+				continue
 			}
 
 			if common.CheckTimeFormat(record.WeekEnd) == false {
 				writeToLog("Skipping record %s?row_id=%s. Malformed week_end.", record.API, record.RowID)
-				return
+				continue
 			}
 
 			if len(record.Location.Coordinates) == 0 {
 				writeToLog("Skipping record %s?row_id=%s. Missing zip_code_location coordinates.", record.API, record.RowID)
-				return
+				continue
 			}
 
 			//Get community area
@@ -78,7 +78,7 @@ func cleanCovid(done <-chan interface{}, covidStream <-chan covidCases) <-chan c
 					ca, err := common.CaFromGeo(record.Location.Coordinates)
 					if err != nil {
 						fmt.Println(err)
-						return
+						continue
 					}
 					record.ComArea = ca
 					addLookup := zipCaCovidLookup{

@@ -183,9 +183,7 @@ func BuildCovidTable() error {
 	covidStream := generator(done, covidCasesList)
 	errCount := 0
 	countWritten := 0
-	countcovid := 0
 	for cc := range cleanCovid(done, covidStream) {
-		countcovid++
 		written, err := addCovidRecord(cc)
 		if err != nil {
 			fmt.Println(err)
@@ -204,7 +202,6 @@ func BuildCovidTable() error {
 	// update lookup file with any new data
 	writeLookup()
 
-	fmt.Printf("Number of valid covid cases (not missing required values): %v\n", countcovid)
 	fmt.Println("Finished Build Covid: ", countWritten)
 	writeToLog("Finished Build Covid: %v", countWritten)
 
