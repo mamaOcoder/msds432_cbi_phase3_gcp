@@ -78,7 +78,6 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 			if len(permit.Location.Coordinates) == 0 {
 				if permit.Latitude == "" || permit.Longitude == "" {
 					if permit.ComArea == "" {
-						fmt.Printf("Skipping record %s?id=%s. Missing all location information.", permit.API, permit.ID)
 						writeToLog("Skipping record %s?id=%s. Missing all location information.", permit.API, permit.ID)
 						continue
 					}
