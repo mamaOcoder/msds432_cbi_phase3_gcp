@@ -45,12 +45,12 @@ func allTasks() {
 	defer close(done)
 
 	// Channel to handle errors
-	errCh := make(chan error, 5) // Buffer size 5 to handle errors from 5 tasks
+	errCh := make(chan error, 4) // Buffer size 5 to handle errors from 5 tasks
 
 	// Concurrently execute tasks
-	go func() {
+	/*go func() {
 		errCh <- transportation.BuildTaxiTable() // Build taxi table
-	}()
+	}()*/
 	go func() {
 		errCh <- covid.BuildCovidTable() // Build Covid table
 	}()
@@ -65,7 +65,7 @@ func allTasks() {
 	}()
 
 	// Wait for all tasks to complete
-	for i := 0; i < 5; i++ { // Waiting for 5 tasks to complete
+	for i := 0; i < 4; i++ { // Waiting for 5 tasks to complete
 		if err := <-errCh; err != nil {
 			fmt.Println("Error:", err)
 		}
