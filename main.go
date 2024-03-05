@@ -47,9 +47,9 @@ func allTasks() {
 	errCh := make(chan error, 5) // Buffer size 5 to handle errors from 5 tasks
 
 	// Concurrently execute tasks
-	go func() {
+	/*go func() {
 		errCh <- transportation.BuildTaxiTable() // Build taxi table
-	}()
+	}()*/
 	go func() {
 		errCh <- covid.BuildCovidTable() // Build Covid table
 	}()
