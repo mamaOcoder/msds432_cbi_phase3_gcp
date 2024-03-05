@@ -87,6 +87,7 @@ func addPermitRecord(permit buildingPermit) (bool, error) {
 	defer db.Close()
 
 	if permitExists(permit.ID) {
+		fmt.Printf("Skipping record %s. Already exists in database.\n", permit.ID)
 		writeToLog("Skipping record %s. Already exists in database.", permit.ID)
 		return false, nil
 	}
@@ -137,6 +138,7 @@ func addPermitRecord(permit buildingPermit) (bool, error) {
 		permit.API)
 
 	if err != nil {
+		fmt.Printf("Couldn't write %s record to building_permit table\n", permit.ID)
 		writeToLog("Couldn't write %s record to building_permit table", permit.ID)
 		return false, err
 	}
