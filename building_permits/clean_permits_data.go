@@ -51,6 +51,7 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 				writeToLog("Skipping record. Missing id.")
 				return
 			}
+			fmt.Println(permit.ID)
 			if permit.PermitNum == "" {
 				writeToLog("Skipping record %s?id=%s. Missing permit_number.", permit.API, permit.ID)
 				return
