@@ -63,7 +63,7 @@ func BuildTaxiTable() error {
 	caLookup = cazip.GetCaLookupList()
 	zipLookup = cazip.GetZipLookupList()
 
-	recordLimit := 5000
+	recordLimit := 2500
 
 	taxiURLs := []string{"https://data.cityofchicago.org/resource/ajtu-isnz.json",
 		"https://data.cityofchicago.org/resource/n26f-ihde.json"}
