@@ -93,7 +93,7 @@ func main() {
 
 	// Initial run of all tasks
 
-	go allTasks()
+	allTasks()
 
 	http.HandleFunc("/", handler)
 
