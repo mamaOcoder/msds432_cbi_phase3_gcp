@@ -122,12 +122,16 @@ func BuildTaxiTable() error {
 	//Turn the responses into a stream for processing
 	taxiStream := generator(done, taxiTrips)
 	errCount := 0
+	countWritten := 0
 	for ct := range cleanTaxi(done, taxiStream) {
-		err = addTaxiTrip(ct)
+		written, err := addTaxiTrip(ct)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s trip to database.", ct.API, ct.TripID)
 			errCount++
+		}
+		if written {
+			countWritten++
 		}
 		if errCount > 10 {
 			writeToLog("Too many errors writing to database. Stopping.")
@@ -135,8 +139,8 @@ func BuildTaxiTable() error {
 		}
 	}
 
-	fmt.Println("Finished Build Taxi")
-	writeToLog("Finished Build Taxi")
+	fmt.Println("Finished Build Taxi: ", countWritten)
+	writeToLog("Finished Build Taxi: %v", countWritten)
 
 	return nil
 }

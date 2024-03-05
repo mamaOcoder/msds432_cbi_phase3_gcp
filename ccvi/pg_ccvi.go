@@ -71,18 +71,18 @@ func ccviExists(ccvi string) bool {
 	return exists
 }
 
-func addCcviRecord(ccvi ccvi) error {
+func addCcviRecord(ccvi ccvi) (bool, error) {
 	db, err := common.OpenConnection()
 	if err != nil {
 		fmt.Println("Couldn't connect to database")
 		writeToLog("Couldn't connect to database")
-		return err
+		return false, err
 	}
 	defer db.Close()
 
 	if ccviExists(ccvi.ID) {
 		writeToLog("Skipping record %s. Already exists in database.", ccvi.ID)
-		return nil
+		return false, nil
 	}
 
 	sql := `INSERT INTO ccvi ("id", 
@@ -116,8 +116,8 @@ func addCcviRecord(ccvi ccvi) error {
 
 	if err != nil {
 		writeToLog("Couldn't write %s record to ccvi table", ccvi.ID)
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }

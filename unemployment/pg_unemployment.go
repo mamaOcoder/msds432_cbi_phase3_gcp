@@ -71,18 +71,18 @@ func unempExists(unemp string) bool {
 	return exists
 }
 
-func addUnempRecord(unemp unemployment) error {
+func addUnempRecord(unemp unemployment) (bool, error) {
 	db, err := common.OpenConnection()
 	if err != nil {
 		fmt.Println("Couldn't connect to database")
 		writeToLog("Couldn't connect to database")
-		return err
+		return false, err
 	}
 	defer db.Close()
 
 	if unempExists(unemp.ComArea) {
 		writeToLog("Skipping record %s. Already exists in database.", unemp.ComArea)
-		return nil
+		return false, nil
 	}
 
 	sql := `INSERT INTO unemployment ("community_area",
@@ -113,8 +113,8 @@ func addUnempRecord(unemp unemployment) error {
 
 	if err != nil {
 		writeToLog("Couldn't write community area-%s record to unemployment table", unemp.ComArea)
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }

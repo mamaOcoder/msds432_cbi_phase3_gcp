@@ -101,12 +101,16 @@ func BuildUnemploymentTable() error {
 	writeToLog("Starting pipeline to clean data and write to PostgreSQL.")
 	unempStream := generator(done, unempRecords)
 	errCount := 0
+	countWritten := 0
 	for cu := range cleanUnemployment(done, unempStream) {
-		err := addUnempRecord(cu)
+		written, err := addUnempRecord(cu)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?community_area=%s record to database.", cu.API, cu.ComArea)
 			errCount++
+		}
+		if written {
+			countWritten++
 		}
 		if errCount > 10 {
 			writeToLog("Too many errors writing to database. Stopping.")
@@ -114,8 +118,8 @@ func BuildUnemploymentTable() error {
 		}
 	}
 
-	fmt.Println("Finished Build Unemployment")
-	writeToLog("Finished Build Unemployment")
+	fmt.Println("Finished Build Unemployment: ", countWritten)
+	writeToLog("Finished Build Unemployment: %v", countWritten)
 
 	return nil
 }

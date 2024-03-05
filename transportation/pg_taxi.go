@@ -74,18 +74,18 @@ func tripExists(trip string) bool {
 	return exists
 }
 
-func addTaxiTrip(taxi taxiTrip) error {
+func addTaxiTrip(taxi taxiTrip) (bool, error) {
 	db, err := common.OpenConnection()
 	if err != nil {
 		fmt.Println("Couldn't connect to database")
 		writeToLog("Couldn't connect to database")
-		return err
+		return false, err
 	}
 	defer db.Close()
 
 	if tripExists(taxi.TripID) {
 		writeToLog("Skipping trip %s. Already exists in database.", taxi.TripID)
-		return nil
+		return false, nil
 	}
 
 	sql := `INSERT INTO taxi_trips ("trip_id", 
@@ -126,8 +126,8 @@ func addTaxiTrip(taxi taxiTrip) error {
 
 	if err != nil {
 		writeToLog("Couldn't write %s trip to taxi table", taxi.TripID)
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }

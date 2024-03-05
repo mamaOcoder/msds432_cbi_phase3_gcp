@@ -119,13 +119,17 @@ func BuildPermitsTable() error {
 	//Turn the responses into a stream for processing
 	permitStream := generator(done, buildingPermits)
 	errCount := 0
+	countWritten := 0
 	//countpermit := 0
 	for cp := range cleanPermit(done, permitStream) {
-		err := addPermitRecord(cp)
+		written, err := addPermitRecord(cp)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s permit to database.", cp.API, cp.ID)
 			errCount++
+		}
+		if written {
+			countWritten++
 		}
 		if errCount > 10 {
 			writeToLog("Too many errors writing to database. Stopping.")
@@ -133,8 +137,8 @@ func BuildPermitsTable() error {
 		}
 	}
 
-	fmt.Println("Finished Build Permits")
-	writeToLog("Finished Build Permits")
+	fmt.Println("Finished Build Permits: ", countWritten)
+	writeToLog("Finished Build Permits: %v", countWritten)
 
 	return nil
 }

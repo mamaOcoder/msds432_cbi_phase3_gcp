@@ -71,18 +71,18 @@ func covidExists(covid string) bool {
 	return exists
 }
 
-func addCovidRecord(covid covidCases) error {
+func addCovidRecord(covid covidCases) (bool, error) {
 	db, err := common.OpenConnection()
 	if err != nil {
 		fmt.Println("Couldn't connect to database")
 		writeToLog("Couldn't connect to database")
-		return err
+		return false, err
 	}
 	defer db.Close()
 
 	if covidExists(covid.RowID) {
 		writeToLog("Skipping record %s. Already exists in database.", covid.RowID)
-		return nil
+		return false, nil
 	}
 
 	sql := `INSERT INTO covid19_cases ("row_id", 
@@ -116,8 +116,8 @@ func addCovidRecord(covid covidCases) error {
 
 	if err != nil {
 		writeToLog("Couldn't write %s record to covid19 table", covid.RowID)
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }

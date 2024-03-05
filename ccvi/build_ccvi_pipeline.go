@@ -98,20 +98,24 @@ func BuildCcviTable() error {
 	//Turn the responses into a stream for processing
 	ccviStream := generator(done, ccviRecords)
 	errCount := 0
+	countWritten := 0
 	for cc := range cleanCCVI(done, ccviStream) {
-		err := addCcviRecord(cc)
+		written, err := addCcviRecord(cc)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s record to database.", cc.API, cc.ID)
 			errCount++
+		}
+		if written {
+			countWritten++
 		}
 		if errCount > 10 {
 			writeToLog("Too many errors writing to database. Stopping.")
 			return fmt.Errorf("Error- too many errors writing to CCVI database. Stopping.")
 		}
 	}
-	fmt.Println("Finished Build CCVI")
-	writeToLog("Finished Build CCVI")
+	fmt.Println("Finished Build CCVI: ", countWritten)
+	writeToLog("Finished Build CCVI: %v", countWritten)
 
 	return nil
 }

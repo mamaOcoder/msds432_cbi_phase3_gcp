@@ -48,9 +48,9 @@ func allTasks() {
 	errCh := make(chan error, 4) // Buffer size 5 to handle errors from 5 tasks
 
 	// Concurrently execute tasks
-	/*go func() {
+	go func() {
 		errCh <- transportation.BuildTaxiTable() // Build taxi table
-	}()*/
+	}()
 	go func() {
 		errCh <- covid.BuildCovidTable() // Build Covid table
 	}()
@@ -77,7 +77,7 @@ func allTasks() {
 func handler(w http.ResponseWriter, r *http.Request) {
 	name := os.Getenv("PROJECT_ID")
 	if name == "" {
-		name = "CBI-Project"
+		name = "MSDS432-CBI-Phase3"
 	}
 
 	fmt.Fprintf(w, "CBI data collection microservices' goroutines have started for %s!\n", name)

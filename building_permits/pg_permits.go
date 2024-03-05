@@ -77,18 +77,18 @@ func permitExists(permit string) bool {
 	return exists
 }
 
-func addPermitRecord(permit buildingPermit) error {
+func addPermitRecord(permit buildingPermit) (bool, error) {
 	db, err := common.OpenConnection()
 	if err != nil {
 		fmt.Println("Couldn't connect to database")
 		writeToLog("Couldn't connect to database")
-		return err
+		return false, err
 	}
 	defer db.Close()
 
 	if permitExists(permit.ID) {
 		writeToLog("Skipping record %s. Already exists in database.", permit.ID)
-		return nil
+		return false, nil
 	}
 
 	sql := `INSERT INTO building_permits ("id",
@@ -138,8 +138,8 @@ func addPermitRecord(permit buildingPermit) error {
 
 	if err != nil {
 		writeToLog("Couldn't write %s record to building_permit table", permit.ID)
-		return err
+		return false, err
 	}
 
-	return nil
+	return true, nil
 }
