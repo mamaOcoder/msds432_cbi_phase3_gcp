@@ -121,6 +121,7 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 				permit.ZipCode = caToZip(permit.ComArea)
 			} else {
 				gotzip := false
+				fmt.Println("Print testing ziplookup", zipLookup[0])
 				for _, zip := range zipLookup {
 					if zip.Geometry.Coordinates.Bound().Contains(orb.Point(permit.Location.Coordinates)) {
 						permit.ZipCode = zip.ZipCode
