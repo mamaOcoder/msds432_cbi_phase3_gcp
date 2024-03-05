@@ -39,6 +39,7 @@ func init() {
 
 func allTasks() {
 
+	start := time.Now()
 	// Channel to synchronize completion of tasks
 	done := make(chan struct{})
 	defer close(done)
@@ -69,6 +70,7 @@ func allTasks() {
 			fmt.Println("Error:", err)
 		}
 	}
+	fmt.Println("Total time taken:", time.Since(start))
 
 }
 
@@ -92,7 +94,7 @@ func main() {
 	log.Print("Starting CBI Microservices ...")
 
 	// Initial run of all tasks
-	start := time.Now()
+
 	go allTasks()
 
 	http.HandleFunc("/", handler)
@@ -112,8 +114,6 @@ func main() {
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Total time taken:", time.Since(start))
 
 	// Define cron jobs to look for updates from the City of Chicago database
 	scheduler := cron.New()
