@@ -132,10 +132,10 @@ func BuildCovidTable() error {
 	writeToLog("Starting Build Covid")
 
 	// Make sure that the covid table is created
-	/*err := createCovidTable()
+	err := createCovidTable()
 	if err != nil {
 		return fmt.Errorf("Error creating Covid19 table: %v", err)
-	}*/
+	}
 
 	queryURLs := common.BuildUrls(covidURLs, recordLimit)
 
@@ -181,7 +181,7 @@ func BuildCovidTable() error {
 	fmt.Println("Starting pipeline to clean Covid19 data and write to PostgreSQL.")
 	writeToLog("Starting pipeline to clean data and write to PostgreSQL.")
 	covidStream := generator(done, covidCasesList)
-	/*errCount := 0
+	errCount := 0
 	for cc := range cleanCovid(done, covidStream) {
 		err := addCovidRecord(cc)
 		if err != nil {
@@ -193,8 +193,6 @@ func BuildCovidTable() error {
 			writeToLog("Too many errors writing to database. Stopping.")
 			return fmt.Errorf("Error- too many errors writing to Covid database. Stopping.")
 		}
-	}*/
-	for range cleanCovid(done, covidStream) {
 	}
 
 	// update lookup file with any new data

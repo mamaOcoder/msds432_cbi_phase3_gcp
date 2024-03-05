@@ -66,10 +66,10 @@ func BuildCcviTable() error {
 	writeToLog("Starting Build CCVI")
 
 	// Make sure that the taxi table is created
-	/*err := createCcviTable()
+	err := createCcviTable()
 	if err != nil {
 		return fmt.Errorf("Error creating CCVI table: %v", err)
-	}*/
+	}
 
 	done := make(chan interface{})
 	defer close(done)
@@ -97,7 +97,7 @@ func BuildCcviTable() error {
 	writeToLog("Starting pipeline to clean data and write to PostgreSQL.")
 	//Turn the responses into a stream for processing
 	ccviStream := generator(done, ccviRecords)
-	/*errCount := 0
+	errCount := 0
 	for cc := range cleanCCVI(done, ccviStream) {
 		err := addCcviRecord(cc)
 		if err != nil {
@@ -109,8 +109,6 @@ func BuildCcviTable() error {
 			writeToLog("Too many errors writing to database. Stopping.")
 			return fmt.Errorf("Error- too many errors writing to CCVI database. Stopping.")
 		}
-	}*/
-	for range cleanCCVI(done, ccviStream) {
 	}
 	fmt.Println("Finished Build CCVI")
 	writeToLog("Finished Build CCVI")

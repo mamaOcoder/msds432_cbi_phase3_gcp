@@ -72,10 +72,10 @@ func BuildTaxiTable() error {
 	writeToLog("Starting Build Taxi")
 
 	// Make sure that the taxi table is created
-	/*err := createTaxiTable()
+	err := createTaxiTable()
 	if err != nil {
 		return fmt.Errorf("Error creating taxi table: %v", err)
-	}*/
+	}
 
 	queryURLs := common.BuildUrls(taxiURLs, recordLimit)
 
@@ -121,9 +121,9 @@ func BuildTaxiTable() error {
 	writeToLog("Starting pipeline to clean data and write to PostgreSQL.")
 	//Turn the responses into a stream for processing
 	taxiStream := generator(done, taxiTrips)
-	/*errCount := 0
+	errCount := 0
 	for ct := range cleanTaxi(done, taxiStream) {
-		err := addTaxiTrip(ct)
+		err = addTaxiTrip(ct)
 		if err != nil {
 			fmt.Println(err)
 			writeToLog("Error writing %s?%s trip to database.", ct.API, ct.TripID)
@@ -133,8 +133,6 @@ func BuildTaxiTable() error {
 			writeToLog("Too many errors writing to database. Stopping.")
 			return fmt.Errorf("Error- too many errors writing to taxi database. Stopping.")
 		}
-	}*/
-	for range cleanTaxi(done, taxiStream) {
 	}
 
 	fmt.Println("Finished Build Taxi")

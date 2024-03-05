@@ -69,10 +69,10 @@ func BuildPermitsTable() error {
 	writeToLog("Starting Build Permits")
 
 	// Make sure that the permits table is created
-	/*err := createPermitTable()
+	err := createPermitTable()
 	if err != nil {
 		return fmt.Errorf("Error creating building_permits table: %v", err)
-	}*/
+	}
 
 	queryURLs := common.BuildUrls(permitURLs, recordLimit)
 
@@ -118,7 +118,7 @@ func BuildPermitsTable() error {
 	writeToLog("Starting pipeline to clean data and write to PostgreSQL.")
 	//Turn the responses into a stream for processing
 	permitStream := generator(done, buildingPermits)
-	/*errCount := 0
+	errCount := 0
 	//countpermit := 0
 	for cp := range cleanPermit(done, permitStream) {
 		err := addPermitRecord(cp)
@@ -131,9 +131,6 @@ func BuildPermitsTable() error {
 			writeToLog("Too many errors writing to database. Stopping.")
 			return fmt.Errorf("Error - too many errors writing to building permits database. Stopping.")
 		}
-	}*/
-
-	for range cleanPermit(done, permitStream) {
 	}
 
 	fmt.Println("Finished Build Permits")
