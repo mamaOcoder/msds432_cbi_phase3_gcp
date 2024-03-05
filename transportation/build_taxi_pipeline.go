@@ -121,7 +121,7 @@ func BuildTaxiTable() error {
 	writeToLog("Starting pipeline to clean data and write to PostgreSQL.")
 	//Turn the responses into a stream for processing
 	taxiStream := generator(done, taxiTrips)
-	errCount := 0
+	/*errCount := 0
 	for ct := range cleanTaxi(done, taxiStream) {
 		err := addTaxiTrip(ct)
 		if err != nil {
@@ -133,6 +133,8 @@ func BuildTaxiTable() error {
 			writeToLog("Too many errors writing to database. Stopping.")
 			return fmt.Errorf("Error- too many errors writing to taxi database. Stopping.")
 		}
+	}*/
+	for range cleanTaxi(done, taxiStream) {
 	}
 
 	fmt.Println("Finished Build Taxi")
