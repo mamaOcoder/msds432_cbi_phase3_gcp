@@ -48,24 +48,29 @@ func cleanPermit(done <-chan interface{}, permitStream <-chan buildingPermit) <-
 			permit.API = apiEndpoint
 
 			if permit.ID == "" {
+				fmt.Printf("Skipping record. Missing id.")
 				writeToLog("Skipping record. Missing id.")
 				return
 			}
 			if permit.PermitNum == "" {
+				fmt.Printf("Skipping record %s?id=%s. Missing permit_number.", permit.API, permit.ID)
 				writeToLog("Skipping record %s?id=%s. Missing permit_number.", permit.API, permit.ID)
 				return
 			}
 			if permit.PermitType == "" {
+				fmt.Printf("Skipping record %s?id=%s. Missing permit_type.\n", permit.API, permit.ID)
 				writeToLog("Skipping record %s?id=%s. Missing permit_type.", permit.API, permit.ID)
 				return
 			}
 
 			if common.CheckTimeFormat(permit.AppDate) == false {
+				fmt.Printf("Skipping record %s?id=%s. Malformed application_start_date.\n", permit.API, permit.ID)
 				writeToLog("Skipping record %s?id=%s. Malformed application_start_date.", permit.API, permit.ID)
 				return
 			}
 
 			if common.CheckTimeFormat(permit.IssueDate) == false {
+				fmt.Printf("Skipping record %s?id=%s. Malformed issue_date.\n", permit.API, permit.ID)
 				writeToLog("Skipping record %s?id=%s. Malformed issue_date.", permit.API, permit.ID)
 				return
 			}
