@@ -93,7 +93,8 @@ func main() {
 
 	// Initial run of all tasks
 
-	allTasks()
+	//allTasks()
+	go covid.BuildCovidTable()
 
 	http.HandleFunc("/", handler)
 

@@ -124,7 +124,7 @@ func BuildCovidTable() error {
 	caLookup = cazip.GetCaLookupList()
 	readLookup()
 
-	recordLimit := 5000
+	recordLimit := 1000
 
 	covidURLs := []string{"https://data.cityofchicago.org/resource/yhhz-zm2v.json"}
 

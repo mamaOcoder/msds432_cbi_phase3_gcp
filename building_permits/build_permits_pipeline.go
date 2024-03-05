@@ -61,7 +61,7 @@ func BuildPermitsTable() error {
 	caLookup = cazip.GetCaLookupList()
 	zipLookup = cazip.GetZipLookupList()
 
-	recordLimit := 10000
+	recordLimit := 1000
 
 	permitURLs := []string{"https://data.cityofchicago.org/resource/ydr8-5enu.json"}
 

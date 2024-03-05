@@ -21,17 +21,14 @@ func cleanCovid(done <-chan interface{}, covidStream <-chan covidCases) <-chan c
 			record.API = apiEndpoint
 
 			if record.RowID == "" {
-				fmt.Printf("Skipping record. Missing row_id.\n")
 				writeToLog("Skipping record. Missing row_id.")
 				return
 			}
 			if record.ZipCode == "" {
-				fmt.Printf("Skipping record %s?row_id=%s. Missing zip_code.\n", record.API, record.RowID)
 				writeToLog("Skipping record %s?row_id=%s. Missing zip_code.", record.API, record.RowID)
 				return
 			}
 			if record.WeekNum == "" {
-				fmt.Printf("Skipping record %s?row_id=%s. Missing week_number.\n", record.API, record.RowID)
 				writeToLog("Skipping record %s?row_id=%s. Missing week_number.", record.API, record.RowID)
 				return
 			}
@@ -42,19 +39,16 @@ func cleanCovid(done <-chan interface{}, covidStream <-chan covidCases) <-chan c
 			}
 
 			if common.CheckTimeFormat(record.WeekStart) == false {
-				fmt.Printf("Skipping record %s?row_id=%s. Malformed week_start.\n", record.API, record.RowID)
 				writeToLog("Skipping record %s?row_id=%s. Malformed week_start.", record.API, record.RowID)
 				return
 			}
 
 			if common.CheckTimeFormat(record.WeekEnd) == false {
-				fmt.Printf("Skipping record %s?row_id=%s. Malformed week_end.\n", record.API, record.RowID)
 				writeToLog("Skipping record %s?row_id=%s. Malformed week_end.", record.API, record.RowID)
 				return
 			}
 
 			if len(record.Location.Coordinates) == 0 {
-				fmt.Printf("Skipping record %s?row_id=%s. Missing zip_code_location coordinates.\n", record.API, record.RowID)
 				writeToLog("Skipping record %s?row_id=%s. Missing zip_code_location coordinates.", record.API, record.RowID)
 				return
 			}
@@ -80,7 +74,6 @@ func cleanCovid(done <-chan interface{}, covidStream <-chan covidCases) <-chan c
 				}
 				if !inlu {
 					//Perform Google Geocoder reverse lookup
-					fmt.Printf("Could not find Community Area in lookup for %v, %s. Performing geocoder reverse lookup.\n", record.Location.Coordinates, record.ZipCode)
 					writeToLog("Could not find Community Area in lookup for %v, %s. Performing geocoder reverse lookup.", record.Location.Coordinates, record.ZipCode)
 					ca, err := common.CaFromGeo(record.Location.Coordinates)
 					if err != nil {
