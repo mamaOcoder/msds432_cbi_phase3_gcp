@@ -61,7 +61,7 @@ func BuildPermitsTable() error {
 	caLookup = cazip.GetCaLookupList()
 	zipLookup = cazip.GetZipLookupList()
 
-	recordLimit := 5000
+	recordLimit := 10000
 
 	permitURLs := []string{"https://data.cityofchicago.org/resource/ydr8-5enu.json"}
 
@@ -120,8 +120,9 @@ func BuildPermitsTable() error {
 	permitStream := generator(done, buildingPermits)
 	errCount := 0
 	countWritten := 0
-	//countpermit := 0
+	countpermit := 0
 	for cp := range cleanPermit(done, permitStream) {
+		countpermit++
 		written, err := addPermitRecord(cp)
 		if err != nil {
 			fmt.Println(err)
@@ -137,6 +138,7 @@ func BuildPermitsTable() error {
 		}
 	}
 
+	fmt.Printf("Number of valid permits (not missing required values): %v\n", countWritten)
 	fmt.Println("Finished Build Permits: ", countWritten)
 	writeToLog("Finished Build Permits: %v", countWritten)
 
