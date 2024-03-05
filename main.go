@@ -93,7 +93,26 @@ func main() {
 
 	// Initial run of all tasks
 	start := time.Now()
-	allTasks()
+	go allTasks()
+
+	http.HandleFunc("/", handler)
+
+	// Determine port for HTTP service.
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("defaulting to port %s", port)
+	}
+
+	// Start HTTP server.
+	log.Printf("listening on port %s", port)
+	log.Print("Navigate to Cloud Run services and find the URL of your service")
+	log.Print("Use the browser and navigate to your service URL to to check your service has started")
+
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatal(err)
+	}
+
 	fmt.Println("Total time taken:", time.Since(start))
 
 	// Define cron jobs to look for updates from the City of Chicago database
@@ -125,24 +144,6 @@ func main() {
 
 	// Start the cron scheduler
 	scheduler.Start()
-
-	http.HandleFunc("/", handler)
-
-	// Determine port for HTTP service.
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-		log.Printf("defaulting to port %s", port)
-	}
-
-	// Start HTTP server.
-	log.Printf("listening on port %s", port)
-	log.Print("Navigate to Cloud Run services and find the URL of your service")
-	log.Print("Use the browser and navigate to your service URL to to check your service has started")
-
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
-		log.Fatal(err)
-	}
 
 	// Keep the program running
 	select {}
